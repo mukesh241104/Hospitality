@@ -1,0 +1,24 @@
+# Ignore everything except what's needed
+*
+
+# Include source
+!app/
+!components/
+!contexts/
+!lib/
+!public/
+!next.config.ts
+!package.json
+!package-lock.json
+!tsconfig.json
+!tailwind.config.ts
+!postcss.config.mjs
+!components.json
+
+# Exclude dev files even in included directories
+**/*.test.*
+**/*.spec.*
+**/node_modules
+**/.git
+**/.env*
+!.env.example
