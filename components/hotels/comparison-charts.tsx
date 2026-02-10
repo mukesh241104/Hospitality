@@ -8,9 +8,11 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
 } from '@/components/ui/chart';
-import { Bar, BarChart, XAxis, YAxis, Cell } from 'recharts';
-import { Star, MapPin, Building2 } from 'lucide-react';
+import { Bar, BarChart, XAxis, YAxis, Cell, RadialBarChart, RadialBar, Legend } from 'recharts';
+import { Star, MapPin, Building2, DollarSign } from 'lucide-react';
 import Image from 'next/image';
 
 interface ComparisonChartsProps {
@@ -33,10 +35,10 @@ export function ComparisonCharts({ hotels }: ComparisonChartsProps) {
     return match ? parseInt(match[1]) : 0;
   };
 
-  // Prepare rating data for bar chart
-  const ratingData = hotels.map((hotel, index) => ({
+  // Prepare price data (Mocked for demonstration as per request)
+  const priceData = hotels.map((hotel, index) => ({
     name: hotel.name?.content?.substring(0, 15) || `Hotel ${index + 1}`,
-    rating: getStarRating(hotel),
+    price: Math.floor(Math.random() * 300) + 100, // Mock price $100-$400
     fill: COLORS[index % COLORS.length],
   }));
 
@@ -48,9 +50,9 @@ export function ComparisonCharts({ hotels }: ComparisonChartsProps) {
   }));
 
   // Chart config
-  const ratingChartConfig: ChartConfig = {
-    rating: {
-      label: 'Star Rating',
+  const priceChartConfig: ChartConfig = {
+    price: {
+      label: 'Price per Night ($)',
     },
     ...Object.fromEntries(
       hotels.map((hotel, index) => [
@@ -128,27 +130,32 @@ export function ComparisonCharts({ hotels }: ComparisonChartsProps) {
 
       {/* Charts Row */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Star Rating Chart */}
+        {/* Price Comparison Chart */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Star className="h-5 w-5" />
-              Star Rating Comparison
+              <DollarSign className="h-5 w-5" />
+              Price Comparison (Est.)
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={ratingChartConfig} className="h-[300px] w-full">
-              <BarChart data={ratingData} layout="vertical">
-                <XAxis type="number" domain={[0, 5]} tickCount={6} />
-                <YAxis type="category" dataKey="name" width={100} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="rating" radius={[0, 4, 4, 0]} />
+            <ChartContainer config={priceChartConfig} className="h-[300px] w-full">
+              <BarChart data={priceData} layout="vertical">
+                <XAxis type="number" hide />
+                <YAxis type="category" dataKey="name" width={100} hide />
+                <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+                <Bar dataKey="price" radius={[0, 4, 4, 0]}>
+                  {priceData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+                <ChartLegend content={<ChartLegendContent />} />
               </BarChart>
             </ChartContainer>
           </CardContent>
         </Card>
 
-        {/* Facilities Count Chart */}
+        {/* Facilities Count Chart (Radial) */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -157,32 +164,31 @@ export function ComparisonCharts({ hotels }: ComparisonChartsProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={facilitiesChartConfig} className="h-[300px] w-full">
-              <BarChart data={facilitiesData} layout="vertical" margin={{ left: 0, right: 30 }}>
-                <XAxis type="number" hide />
-                <YAxis
-                  dataKey="name"
-                  type="category"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  width={100}
+            <ChartContainer config={facilitiesChartConfig} className="h-[300px] w-full mx-auto">
+              <RadialBarChart
+                innerRadius="30%"
+                outerRadius="100%"
+                data={facilitiesData}
+                startAngle={180}
+                endAngle={0}
+              >
+                <RadialBar
+                  label={{ fill: '#666', position: 'insideStart' }}
+                  background
+                  dataKey="facilities"
+                  cornerRadius={5}
+                />
+                <Legend
+                  iconSize={10}
+                  layout="vertical"
+                  verticalAlign="middle"
+                  align="right"
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent indicator="line" />}
+                  content={<ChartTooltipContent hideLabel nameKey="name" />}
                 />
-                <Bar
-                  dataKey="facilities"
-                  layout="vertical"
-                  fill="var(--color-facilities)"
-                  radius={4}
-                >
-                  {facilitiesData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Bar>
-              </BarChart>
+              </RadialBarChart>
             </ChartContainer>
           </CardContent>
         </Card>
