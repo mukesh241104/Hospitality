@@ -21,7 +21,8 @@ import {
   Car,
   UtensilsCrossed,
   Eye,
-  Check
+  Check,
+  X
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -108,24 +109,6 @@ export function HotelCardEnhanced({ hotel, view = "grid" }: HotelCardProps) {
                     </span>
                   </div>
                 </div>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div
-                      className={cn(
-                        "flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border transition-colors",
-                        selected
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-muted-foreground/30 hover:border-primary"
-                      )}
-                      onClick={handleToggle}
-                    >
-                      {selected && <Check className="h-4 w-4" />}
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {selected ? "Remove from compare" : canSelect ? "Add to compare" : "Max 4 hotels"}
-                  </TooltipContent>
-                </Tooltip>
               </div>
 
               {hotel.description?.content && (
@@ -152,16 +135,33 @@ export function HotelCardEnhanced({ hotel, view = "grid" }: HotelCardProps) {
               )}
             </div>
 
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between gap-2">
               <div className="text-sm text-muted-foreground">
                 {hotel.accommodationType?.typeDescription || hotel.categoryGroup?.description?.content}
               </div>
-              <Button size="sm" variant="outline" asChild>
-                <Link href={`/hotels/${hotel.code}`}>
-                  <Eye className="mr-2 h-4 w-4" />
-                  View Details
-                </Link>
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant={selected ? "secondary" : "default"}
+                  size="sm"
+                  onClick={handleToggle}
+                  disabled={!canSelect && !selected}
+                >
+                  {selected ? (
+                    <>
+                      <X className="mr-2 h-4 w-4" />
+                      Remove
+                    </>
+                  ) : (
+                    "Compare"
+                  )}
+                </Button>
+                <Button size="sm" variant="outline" asChild>
+                  <Link href={`/hotels/${hotel.code}`}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    View Details
+                  </Link>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </div>
@@ -199,28 +199,6 @@ export function HotelCardEnhanced({ hotel, view = "grid" }: HotelCardProps) {
               {stars} Star
             </Badge>
           )}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                className={cn(
-                  "flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 bg-background/90 backdrop-blur-sm transition-all",
-                  selected
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-transparent hover:border-primary"
-                )}
-                onClick={handleToggle}
-              >
-                <Checkbox
-                  checked={selected}
-                  disabled={!canSelect && !selected}
-                  className="pointer-events-none h-4 w-4"
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              {selected ? "Remove from compare" : canSelect ? "Add to compare" : "Max 4 hotels"}
-            </TooltipContent>
-          </Tooltip>
         </div>
       </div>
 
@@ -262,12 +240,30 @@ export function HotelCardEnhanced({ hotel, view = "grid" }: HotelCardProps) {
             </div>
           )}
 
-          <Button className="w-full" variant="outline" size="sm" asChild>
-            <Link href={`/hotels/${hotel.code}`}>
-              <Eye className="mr-2 h-4 w-4" />
-              View Details
-            </Link>
-          </Button>
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant={selected ? "secondary" : "default"}
+              size="sm"
+              onClick={handleToggle}
+              disabled={!canSelect && !selected}
+              className="w-full"
+            >
+              {selected ? (
+                <>
+                  <X className="mr-2 h-4 w-4" />
+                  Remove
+                </>
+              ) : (
+                "Compare"
+              )}
+            </Button>
+            <Button variant="outline" size="sm" asChild className="w-full">
+              <Link href={`/hotels/${hotel.code}`}>
+                <Eye className="mr-2 h-4 w-4" />
+                Details
+              </Link>
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

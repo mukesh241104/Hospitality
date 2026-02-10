@@ -7,6 +7,8 @@ interface HotelFilters {
   destination: string;
   destinationName: string;
   country: string;
+  name: string;
+  category: string;
 }
 
 interface HotelContextType {
@@ -52,6 +54,8 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
     destination: '',
     destinationName: '',
     country: '',
+    name: '',
+    category: '',
   });
   const [selectedHotels, setSelectedHotels] = useState<HotelbedsHotel[]>([]);
 
@@ -98,6 +102,12 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
       }
       if (filters.country) {
         params.append('country', filters.country);
+      }
+      if (filters.name) {
+        params.append('name', filters.name);
+      }
+      if (filters.category) {
+        params.append('category', filters.category);
       }
 
       const response = await fetch(`/api/hotels?${params.toString()}`);

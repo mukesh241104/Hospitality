@@ -9,6 +9,9 @@ export async function GET(request: NextRequest) {
     const from = searchParams.get('from') || '1';
     const to = searchParams.get('to') || '20';
 
+    const name = searchParams.get('name') || '';
+    const category = searchParams.get('category') || '';
+
     // Build query string
     const params = new URLSearchParams({
       fields: 'all',
@@ -23,6 +26,13 @@ export async function GET(request: NextRequest) {
     }
     if (country) {
       params.append('countryCode', country);
+    }
+    if (name) {
+      // Hotelbeds uses 'keyword' for name search
+      params.append('keyword', name);
+    }
+    if (category) {
+      params.append('categoryCode', category);
     }
 
     const data = await fetchHotelbeds<HotelbedsHotelsResponse>(

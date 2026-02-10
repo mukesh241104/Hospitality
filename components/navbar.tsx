@@ -16,9 +16,8 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
-const navigation = [
-  { name: "Search Hotels", href: "/hotels", icon: Search },
-  { name: "Compare", href: "/compare", icon: GitCompareArrows },
+const navigation: { name: string; href: string; icon: any }[] = [
+
 ];
 
 interface NavbarProps {
@@ -91,19 +90,6 @@ export function Navbar({ user }: NavbarProps) {
                   <p className="text-sm font-medium">{user.email}</p>
                   <p className="text-xs text-muted-foreground">Signed in</p>
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/hotels">
-                    <Search className="mr-2 h-4 w-4" />
-                    Search Hotels
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/compare">
-                    <GitCompareArrows className="mr-2 h-4 w-4" />
-                    Compare Hotels
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                   Sign out

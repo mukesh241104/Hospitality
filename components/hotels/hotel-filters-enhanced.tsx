@@ -67,11 +67,16 @@ export function HotelFiltersEnhanced() {
     setSearchQuery("");
   };
 
+  const handleClearAll = () => {
+    setFilters({ destination: "", destinationName: "", country: "", name: "", category: "" });
+    setSearchQuery("");
+  };
+
   const handleSearch = () => {
     searchHotels(false);
   };
 
-  const activeFiltersCount = [filters.destination, filters.country].filter(Boolean).length;
+  const activeFiltersCount = [filters.destination, filters.country, filters.name, filters.category].filter(Boolean).length;
 
   return (
     <div className="space-y-6">
@@ -90,10 +95,7 @@ export function HotelFiltersEnhanced() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => {
-              setFilters({ destination: "", destinationName: "", country: "" });
-              setSearchQuery("");
-            }}
+            onClick={handleClearAll}
             className="h-8 text-xs"
           >
             Clear all
@@ -197,6 +199,51 @@ export function HotelFiltersEnhanced() {
             <SelectItem value="GR">Greece (GR)</SelectItem>
             <SelectItem value="TH">Thailand (TH)</SelectItem>
             <SelectItem value="MX">Mexico (MX)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Separator />
+
+      {/* Hotel Name Search */}
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">Hotel Name</Label>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search by hotel name..."
+            value={filters.name}
+            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+            className="pl-9"
+          />
+          {filters.name && (
+            <button
+              onClick={() => setFilters({ ...filters, name: "" })}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Star Rating Filter */}
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">Star Rating</Label>
+        <Select
+          value={filters.category}
+          onValueChange={(value) => setFilters({ ...filters, category: value })}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="All ratings" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All ratings</SelectItem>
+            <SelectItem value="5EST">5 Stars</SelectItem>
+            <SelectItem value="4EST">4 Stars</SelectItem>
+            <SelectItem value="3EST">3 Stars</SelectItem>
+            <SelectItem value="2EST">2 Stars</SelectItem>
+            <SelectItem value="1EST">1 Star</SelectItem>
           </SelectContent>
         </Select>
       </div>

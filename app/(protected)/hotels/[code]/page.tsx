@@ -2,6 +2,7 @@ import { fetchHotelbeds, HotelbedsHotelDetailsResponse } from "@/lib/hotelbeds";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { ImageSlider } from "@/components/ui/image-slider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -77,22 +78,9 @@ export default async function HotelDetailsPage({ params }: HotelDetailsPageProps
 
       {/* Hero Section */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Main Image */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted lg:aspect-[16/10]">
-          {mainImage ? (
-            <Image
-              src={mainImage}
-              alt={hotel.name?.content || "Hotel"}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center">
-              <Building2 className="h-16 w-16 text-muted-foreground/50" />
-            </div>
-          )}
+        {/* Main Image Slider */}
+        <div className="group relative">
+          <ImageSlider images={images} name={hotel.name?.content || "Hotel"} />
         </div>
 
         {/* Hotel Info */}

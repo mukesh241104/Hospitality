@@ -9,7 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Bar, BarChart, XAxis, YAxis, RadialBar, RadialBarChart, PolarAngleAxis } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import { Star, MapPin, Building2 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -158,29 +158,32 @@ export function ComparisonCharts({ hotels }: ComparisonChartsProps) {
           </CardHeader>
           <CardContent>
             <ChartContainer config={facilitiesChartConfig} className="h-[300px] w-full">
-              <RadialBarChart
-                data={facilitiesData}
-                innerRadius="30%"
-                outerRadius="100%"
-                startAngle={180}
-                endAngle={0}
-              >
-                <PolarAngleAxis type="number" domain={[0, Math.max(...facilitiesData.map(d => d.facilities)) + 10]} tick={false} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <RadialBar dataKey="facilities" background />
-              </RadialBarChart>
+              <BarChart data={facilitiesData} layout="vertical" margin={{ left: 0, right: 30 }}>
+                <XAxis type="number" hide />
+                <YAxis
+                  dataKey="name"
+                  type="category"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  width={100}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator="line" />}
+                />
+                <Bar
+                  dataKey="facilities"
+                  layout="vertical"
+                  fill="var(--color-facilities)"
+                  radius={4}
+                >
+                  {facilitiesData.map((entry, index) => (
+                    <cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
             </ChartContainer>
-            <div className="mt-4 flex flex-wrap justify-center gap-4">
-              {hotels.map((hotel, index) => (
-                <div key={hotel.code} className="flex items-center gap-2">
-                  <div
-                    className="h-3 w-3 rounded-full"
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  />
-                  <span className="text-sm">{hotel.name?.content?.substring(0, 20)}</span>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       </div>

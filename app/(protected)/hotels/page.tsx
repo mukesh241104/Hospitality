@@ -25,7 +25,7 @@ export default function HotelsPage() {
       <div className="flex gap-8">
         {/* Sidebar Filters - Desktop */}
         <aside className="hidden w-72 flex-shrink-0 lg:block">
-          <Card className="sticky top-24 p-5">
+          <Card className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto p-5">
             <HotelFiltersEnhanced />
           </Card>
         </aside>
