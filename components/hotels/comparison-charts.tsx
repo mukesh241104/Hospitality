@@ -9,7 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Bar, BarChart, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis, Cell } from 'recharts';
 import { Star, MapPin, Building2 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -179,7 +179,7 @@ export function ComparisonCharts({ hotels }: ComparisonChartsProps) {
                   radius={4}
                 >
                   {facilitiesData.map((entry, index) => (
-                    <cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Bar>
               </BarChart>
