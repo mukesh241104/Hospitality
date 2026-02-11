@@ -13,12 +13,16 @@ export async function createClient() {
           return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
+          // This is read-only in Server Components, so we don't need to implement setAll 
+          // However, to satisfy the type definition, we can leave an empty implementation or try/catch
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );
           } catch {
-            // Ignore errors from Server Components
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
           }
         },
       },
