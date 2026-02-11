@@ -2,6 +2,7 @@ import { Navbar } from "@/components/navbar";
 import { HotelProvider } from "@/contexts/hotel-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function ProtectedLayout({
   children,
@@ -11,6 +12,10 @@ export default async function ProtectedLayout({
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
+
+  if (!user) {
+    redirect("/auth/login");
+  }
 
   return (
     <TooltipProvider>
