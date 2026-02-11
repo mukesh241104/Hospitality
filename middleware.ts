@@ -40,14 +40,24 @@ export async function middleware(request: NextRequest) {
     ) {
         const url = request.nextUrl.clone();
         url.pathname = "/auth/login";
-        return NextResponse.redirect(url);
+        const redirectResponse = NextResponse.redirect(url);
+        const allCookies = supabaseResponse.cookies.getAll();
+        allCookies.forEach(({ name, value, options }) =>
+            redirectResponse.cookies.set(name, value, options)
+        );
+        return redirectResponse;
     }
 
     // If user is logged in, redirect them away from auth pages
     if (user && request.nextUrl.pathname.startsWith("/auth")) {
         const url = request.nextUrl.clone();
         url.pathname = "/hotels";
-        return NextResponse.redirect(url);
+        const redirectResponse = NextResponse.redirect(url);
+        const allCookies = supabaseResponse.cookies.getAll();
+        allCookies.forEach(({ name, value, options }) =>
+            redirectResponse.cookies.set(name, value, options)
+        );
+        return redirectResponse;
     }
 
     return supabaseResponse;
